@@ -62,12 +62,12 @@
         <dependency>
             <groupId>org.jacamo</groupId>
             <artifactId>cartago</artifactId>
-            <version>2.3-SNAPSHOT</version>
+            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>org.jason-lang</groupId>
             <artifactId>jason</artifactId>
-            <version>2.3-SNAPSHOT</version>
+            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>br.usp.poli.pcs</groupId>
