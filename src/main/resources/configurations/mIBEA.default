@@ -1,0 +1,4 @@
+algorithmName = mIbea
+populationSize = 100
+archiveSize = 100
+maxIteractions = 750

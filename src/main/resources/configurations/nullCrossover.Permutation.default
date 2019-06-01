@@ -1,0 +1,4 @@
+crossoverName = NullCross
+crossoverProbality = 1.0
+mutationName = PermutationSwapMutation
+mutationProbability = 1.0 / numberOfVariables

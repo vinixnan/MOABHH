@@ -1,0 +1,9 @@
+algorithmName = MoeadStm
+populationSize = 100
+archiveSize = 100
+maxIteractions = 750
+neighborSize = 10
+neighborhoodSelectionProbability = 0.9
+maximumNumberOfReplacedSolutions = 2
+weightsPath = MOEAD_Weights
+moeadFunction =PBI

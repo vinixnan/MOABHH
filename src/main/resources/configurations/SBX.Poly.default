@@ -1,0 +1,6 @@
+crossoverName = sbxCrossover
+crossoverProbality = 1.0
+crossoverDistribution = 30
+mutationName = polynomialMutation
+mutationProbability = 1.0 / numberOfVariables
+mutationDistribution = 20

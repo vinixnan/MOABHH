@@ -1,0 +1,6 @@
+crossoverName = blxAlphaCrossover
+crossoverProbality = 1.0
+alpha = 0.5
+mutationName = polynomialMutation
+mutationProbability = 1.0 / numberOfVariables
+mutationDistribution = 2

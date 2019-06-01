@@ -1,0 +1,4 @@
+crossoverName = pmxCrossover
+crossoverProbality = 0.9
+mutationName = permutationSwapMutation
+mutationProbability = 0.2

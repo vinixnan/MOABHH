@@ -1,0 +1,6 @@
+algorithmName = Mombi2
+populationSize = 200
+archiveSize = 200
+maxIteractions = 750
+neighborSize = 20
+weightsPath = mombi2-weights/weight/weight_02D_200.sld

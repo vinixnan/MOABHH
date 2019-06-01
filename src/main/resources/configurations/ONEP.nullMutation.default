@@ -1,0 +1,4 @@
+crossoverName = onePointCrossover
+crossoverProbality = 1.0
+mutationName = nullMutation
+mutationProbability = 1.0 / numberOfVariables

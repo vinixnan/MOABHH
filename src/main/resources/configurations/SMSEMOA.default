@@ -1,0 +1,4 @@
+algorithmName = SmsEmoa
+populationSize = 100
+maxIteractions = 750
+smsOffset = 100.0

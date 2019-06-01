@@ -1,0 +1,8 @@
+crossoverName = differentialEvolutionCrossover
+deCr = 1.0
+deF = 0.5
+deK = 0.5
+deVariant = rand/1/bin
+mutationName = polynomialMutation
+mutationProbability = 1.0 / numberOfVariables
+mutationDistribution = 20
