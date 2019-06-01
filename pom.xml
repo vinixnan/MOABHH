@@ -19,6 +19,16 @@
     </repositories>
     <dependencies>
         <dependency>
+	    <groupId>com.github.vinixnan</groupId>
+	    <artifactId>jmetalExtraProblems</artifactId>
+	    <version>1.0</version>
+	</dependency>
+        <dependency>
+	    <groupId>com.github.vinixnan</groupId>
+	    <artifactId>jMetalHyperHeuristicHelper</artifactId>
+	    <version>1F</version>
+	</dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.2</version>
@@ -53,11 +63,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>2.22.0</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>jMetalHyperHeuristicHelper</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jacamo</groupId>
