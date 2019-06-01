@@ -6,6 +6,7 @@ import br.usp.poli.pcs.lti.jmetalhhhelper.util.IndicatorFactory;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.*;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.Calculator;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.extrametrics.DummyAE;
+import br.usp.poli.pcs.lti.jmetalproblems.interfaces.RealWorldProblem;
 
 import cartago.AgentId;
 import cartago.ArtifactId;
@@ -28,7 +29,7 @@ import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.SolutionListUtils;
 import org.uma.jmetal.util.archive.impl.NonDominatedSolutionListArchive;
 import org.uma.jmetal.util.front.imp.ArrayFront;
-import uk.ac.nottingham.asap.interfaces.RealWorldProblem;
+
 
 /**
  * The type Indicator voter.

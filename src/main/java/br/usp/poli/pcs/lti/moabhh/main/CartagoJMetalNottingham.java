@@ -5,7 +5,7 @@ import br.usp.poli.pcs.lti.moabhh.agents.HyperHeuristicAgent;
 import br.usp.poli.pcs.lti.moabhh.agents.IndicatorVoter;
 import br.usp.poli.pcs.lti.moabhh.agents.ProblemManager;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.IndicatorFactory;
-import br.usp.poli.pcs.lti.jmetalhhhelper.util.ProblemFactory;
+import br.usp.poli.pcs.lti.jmetalproblems.util.ProblemFactory;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.HypervolumeCalculator;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.IgdCalculator;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.RniCalculator;

@@ -3,8 +3,9 @@ package br.usp.poli.pcs.lti.moabhh.agents;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.HypervolumeCalculator;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.IgdCalculator;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.RniCalculator;
+import br.usp.poli.pcs.lti.jmetalproblems.interfaces.RealWorldProblem;
 import br.usp.poli.pcs.lti.moabhh.core.votingmethods.VotingMethod;
-import uk.ac.nottingham.asap.interfaces.RealWorldProblem;
+
 
 import cartago.ArtifactId;
 import cartago.CartagoException;

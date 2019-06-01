@@ -8,7 +8,7 @@ package br.usp.poli.pcs.lti.moabhh.main;
 import br.usp.poli.pcs.lti.jmetalhhhelper.core.ParametersforAlgorithm;
 import br.usp.poli.pcs.lti.jmetalhhhelper.core.ParametersforHeuristics;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.AlgorithmBuilder;
-import br.usp.poli.pcs.lti.jmetalhhhelper.util.ProblemFactory;
+import br.usp.poli.pcs.lti.jmetalproblems.util.ProblemFactory;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.EpsilonCalculator;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.HypervolumeCalculator;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.IgdCalculator;
