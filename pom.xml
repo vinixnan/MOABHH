@@ -26,7 +26,7 @@
         <dependency>
 	    <groupId>com.github.vinixnan</groupId>
 	    <artifactId>jMetalHyperHeuristicHelper</artifactId>
-	    <version>1F</version>
+	    <version>First</version>
 	</dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
