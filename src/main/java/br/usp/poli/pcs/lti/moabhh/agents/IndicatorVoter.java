@@ -171,6 +171,9 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
                             //System.out.println(Arrays.toString(nadirPoints));
                             this.qualityIndicator.setParetoTrueFront(new ArrayFront(ax));
                         }
+                        else{
+                            currentPopulation=this.processingForBenchmark(currentPopulation);
+                        }
                         //System.out.println(this.getAgentName()+" gets population "+currentPopulation.size());
                         List<List<S>[]> allsharestype = this.separatePopulationByOp(currentPopulation);
                         List<S>[] shares;
@@ -329,5 +332,10 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
         toReturn.addAll(currentPopulation);
         toReturn.addAll(offspring);
         return toReturn;
+    }
+
+    protected List<S> processingForBenchmark(List<S> currentPopulation) {
+        //just to overhide
+        return currentPopulation;
     }
 }
