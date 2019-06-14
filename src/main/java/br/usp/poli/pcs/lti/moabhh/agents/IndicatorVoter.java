@@ -7,6 +7,7 @@ import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.*;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.Calculator;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.extrametrics.DummyAE;
 import br.usp.poli.pcs.lti.jmetalproblems.interfaces.RealWorldProblem;
+import br.usp.poli.pcs.lti.moabhh.util.ReferencePointUtils;
 
 import cartago.AgentId;
 import cartago.ArtifactId;
@@ -14,6 +15,7 @@ import cartago.CartagoException;
 import cartago.Op;
 import cartago.OpFeedbackParam;
 import com.google.common.primitives.Doubles;
+import java.io.FileNotFoundException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
     protected ArtifactId problemArtifactId;
     protected ArtifactId votingArtifactId;
     protected double[] nadirPoints;
+    protected double[] idealPoints;
     protected List<S> previousPopulation;
     protected int normalizationVar=1;
 
@@ -75,13 +78,18 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
         this.qualityIndicator = null;
         previousPopulation = null;
     }
-
-    public Solution[] findNadir(DoubleProblem problem, List<S> pop) {
+    
+    protected void findReference(Problem problem, List<S> pop){
         pop.forEach((s) -> {
             for (int i = 0; i < s.getNumberOfObjectives(); i++) {
-                nadirPoints[i] = Math.max(nadirPoints[i], s.getObjective(i) * 2);
+                nadirPoints[i] = Math.max(nadirPoints[i], s.getObjective(i));
+                idealPoints[i] = Math.min(idealPoints[i], s.getObjective(i));
             }
         });
+    }
+
+    public Solution[] findNadir(DoubleProblem problem, List<S> pop) {
+        findReference(problem, pop);
         Solution[] toReturn=new Solution[problem.getNumberOfObjectives()];
         for (int k = 0; k < problem.getNumberOfObjectives(); k++) {
             Solution s = new DoubleTaggedSolution(problem);
@@ -106,6 +114,7 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
             votingArtifactId = lookupArtifact("voting");
             Problem problem = (Problem) this.getAttributeArtifact(problemArtifactId, "getProblem_");
             nadirPoints = new double[problem.getNumberOfObjectives()];
+            idealPoints = new double[problem.getNumberOfObjectives()];
             int populationSize = (int) this.getAttributeArtifact(problemArtifactId, "getQtdPopulation");
             this.qualityIndicator = IndicatorFactory
                     .buildCalculator(indicatorName, problem, populationSize);
@@ -147,33 +156,16 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
                     } else {
                         //System.out.println(this.getAgentName()+" votes");
                         int gen = (int) this.getAttributeArtifact(problemArtifactId, "getIteration");
-                        if (problem instanceof RealWorldProblem) {
-                            //List ax = new ArrayList(currentPopulation);
-                            List ax = new ArrayList();
-                            if (this.qualityIndicator instanceof HypervolumeCalculator || qualityIndicator instanceof RCalculator || qualityIndicator instanceof EpsilonCalculator) {
-                                Solution[] nadir = findNadir((DoubleProblem) problem, currentPopulation);
-                                for (int i = 0; i < nadir.length; i++) {
-                                    ax.add((S) nadir[i]);
-                                }
-                            }
-                            else if(this.qualityIndicator instanceof IgdCalculator || this.qualityIndicator instanceof GdCalculator){
-                                double[] ideal=new double[nadirPoints.length];
-                                Arrays.fill(ideal, 0);
-                                Solution s = new DoubleTaggedSolution((DoubleProblem) problem);
-                                for (int i = 0; i < s.getNumberOfObjectives(); i++) {
-                                    s.setObjective(i, ideal[i]);
-                                }
-                                ax.add((S) s);
-                            }
-                            else{
-                                ax = new ArrayList(currentPopulation);
-                            }
-                            //System.out.println(Arrays.toString(nadirPoints));
-                            this.qualityIndicator.setParetoTrueFront(new ArrayFront(ax));
+                        if (useObtainedReferencePoint(problem)) {
+                            findReference(problem, currentPopulation);
                         }
                         else{
                             currentPopulation=this.processingForBenchmark(currentPopulation);
+                            ReferencePointUtils.findReference(problem.getName(), problem.getNumberOfObjectives());
+                            nadirPoints=ReferencePointUtils.nadir;
+                            idealPoints=ReferencePointUtils.ideal;
                         }
+                        this.qualityIndicator.setMinMax(idealPoints, nadirPoints);
                         //System.out.println(this.getAgentName()+" gets population "+currentPopulation.size());
                         List<List<S>[]> allsharestype = this.separatePopulationByOp(currentPopulation);
                         List<S>[] shares;
@@ -191,6 +183,8 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
                     doAction(problemArtifactId, new Op("setAlreadyVoted", this.id));
                 }
             } catch (CartagoException ex) {
+                Logger.getLogger(IndicatorVoter.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (FileNotFoundException ex) {
                 Logger.getLogger(IndicatorVoter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -337,5 +331,10 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
     protected List<S> processingForBenchmark(List<S> currentPopulation) {
         //just to overhide
         return currentPopulation;
+    }
+
+    protected boolean useObtainedReferencePoint(Problem problem) {
+        //necessary for overhide
+        return problem instanceof RealWorldProblem;
     }
 }
