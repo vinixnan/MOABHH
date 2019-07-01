@@ -25,6 +25,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import br.usp.poli.pcs.lti.jmetalhhhelper.core.interfaces.LLHInterface;
+import br.usp.poli.pcs.lti.jmetalproblems.interfaces.RealWorldProblem;
 
 /**
  * The type Algorithm agent.
@@ -43,6 +44,7 @@ public class AlgorithmAgentv2<S extends Solution<?>> extends SimplerAgent {
     protected ParametersforHeuristics pHeur;
     protected ParametersforAlgorithm paramAlg;
     protected AlgorithmBuilder hb;
+    protected Problem problem;
     /**
      * The Copeland artifact.
      */
@@ -62,7 +64,7 @@ public class AlgorithmAgentv2<S extends Solution<?>> extends SimplerAgent {
         try {
             problemArtifactId = lookupArtifact("problem");
             populationArtifactId = lookupArtifact("population");
-            Problem problem = (Problem) this.getAttributeArtifact(problemArtifactId, "getProblem_");
+            problem = (Problem) this.getAttributeArtifact(problemArtifactId, "getProblem_");
             int populationSize = (int) this.getAttributeArtifact(problemArtifactId, "getQtdPopulation");
             int maxIterations = (int) this.getAttributeArtifact(problemArtifactId, "getMaxIterations");
             paramAlg = new ParametersforAlgorithm(algConfigFileName);
@@ -92,7 +94,7 @@ public class AlgorithmAgentv2<S extends Solution<?>> extends SimplerAgent {
         if(toPrint){
             System.out.println("Increased "+from+" to "+size+" "+alg.getClass().getSimpleName());
         }
-        System.out.println("Run "+alg.getClass().getSimpleName());
+        //System.out.println("Run "+alg.getClass().getSimpleName());
         return pop;
     }
     
@@ -279,6 +281,11 @@ public class AlgorithmAgentv2<S extends Solution<?>> extends SimplerAgent {
         //System.out.println("OUt "+this.getAgentName());
         //System.out.println("OUt "+this.getAgentName());
     }
+    
+    protected void updateIterations(int iterations) throws CartagoException {
+        alg.setIterations(iterations);
+        doAction(problemArtifactId, new Op("setIteration", iterations));
+    }
 
     @Override
     public void run() {
@@ -297,17 +304,23 @@ public class AlgorithmAgentv2<S extends Solution<?>> extends SimplerAgent {
                 if (!alreadyExecuted && (algStep == 2 || algStep == 11)) {
                     doAction(problemArtifactId, new Op("isThisMetaHeuristicAllowedToExecute", this.id, res));
                     Boolean allowedToExecute = (Boolean) res.get();
-                    if (allowedToExecute) {
-                        int iterations = (int) this.getAttributeArtifact(problemArtifactId, "getIteration");
+                    int iterations = (int) this.getAttributeArtifact(problemArtifactId, "getIteration");
+                    if (allowedToExecute && iterations < maxGen) {
                         this.prepareToExecute(iterations);
                         if (this.hasPopulationAssigned) {
                             //System.out.println(this.getAgentName());
+                            if(problem instanceof RealWorldProblem){
+                                //System.out.println(this.alg.getClass().getSimpleName()+" before "+((RealWorldProblem)problem).getQtdEvaluated());
+                            }
                             //System.out.println(this.getAgentName() + " executes at "+iterations);
-                            for (int i = 0; i < epsilon && iterations < maxGen; i++) {
+                            for (int i = 0; i < epsilon; i++) {
                                 //System.err.print(" run");
                                 this.alg.generateNewPopulation();
                                 iterations++;
-                                alg.setIterations(iterations);
+                                updateIterations(iterations);
+                                if(problem instanceof RealWorldProblem){
+                                //System.out.println(this.alg.getClass().getSimpleName()+" after "+((RealWorldProblem)problem).getQtdEvaluated());
+                            }
                             }
                             //System.out.println("");
                             //System.out.println(this.getAgentName() + " set population share");

@@ -198,8 +198,11 @@ public class ProblemManager<S extends Solution<?>> extends SimplerAgent {
                         }
                     }
                     
-                    //System.out.println("HH;" + this.printResults(currentPopulation, problem) + ";" + (end - begin));
-                    System.out.println("HH;"  + (end - begin));
+                    try {
+                        System.out.println("HH;" + this.printResults(currentPopulation, problem) + ";" + (end - begin));
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(ProblemManager.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     System.err.println(Arrays.toString(firstPlace).replace(", ", ";").replace("[", "").replace("]", ""));
                     System.err.println(Arrays.toString(secondPlace).replace(", ", ";").replace("[", "").replace("]", ""));
                     System.err.println(Arrays.toString(thirdPlace).replace(", ", ";").replace("[", "").replace("]", ""));
@@ -243,7 +246,7 @@ public class ProblemManager<S extends Solution<?>> extends SimplerAgent {
                 IgdCalculator igd = new IgdCalculator(problem.getNumberOfObjectives(), pf);
                 double igdValue = igd.execute(archive);
                 strToReturn = hypValue + ";" + igdValue + ";" + rniValue;
-            } else {
+            } else if (!(problem instanceof RealWorldProblem) ) {
                 String pf
                         = "pareto_fronts/" + problem.getName() + "." + problem.getNumberOfObjectives() + "D.pf";
                 if (problem.getName().equals("UF")) {
@@ -270,6 +273,12 @@ public class ProblemManager<S extends Solution<?>> extends SimplerAgent {
                 .setFunFileOutputContext(new DefaultFileOutputContext(funFile))
                 .setVarFileOutputContext(new DefaultFileOutputContext(varFile))
                 .print();
+        new SolutionListOutput(currentPopulation)
+                .setSeparator("\t")
+                .setFunFileOutputContext(new DefaultFileOutputContext(funFile+"f"))
+                .setVarFileOutputContext(new DefaultFileOutputContext(varFile+"f"))
+                .print();
+        
         return strToReturn;
     }
 

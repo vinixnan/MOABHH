@@ -15,11 +15,9 @@ import cartago.CartagoException;
 import cartago.Op;
 import cartago.OpFeedbackParam;
 import com.google.common.primitives.Doubles;
-import java.io.FileNotFoundException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +28,7 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.SolutionListUtils;
 import org.uma.jmetal.util.archive.impl.NonDominatedSolutionListArchive;
+import org.uma.jmetal.util.front.Front;
 import org.uma.jmetal.util.front.imp.ArrayFront;
 
 
@@ -125,6 +124,9 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
             for (int i = 0; i < agids.size(); i++) {
                 this.arms[i] = agids.get(i).getAgentName();
             }
+            ReferencePointUtils.findReference(problem.getName(), problem.getNumberOfObjectives());
+            nadirPoints=ReferencePointUtils.nadir;
+            idealPoints=ReferencePointUtils.ideal;
         } catch (CartagoException | IOException ex) {
             Logger.getLogger(IndicatorVoter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -161,10 +163,19 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
                         }
                         else{
                             currentPopulation=this.processingForBenchmark(currentPopulation);
-                            ReferencePointUtils.findReference(problem.getName(), problem.getNumberOfObjectives());
-                            nadirPoints=ReferencePointUtils.nadir;
-                            idealPoints=ReferencePointUtils.ideal;
                         }
+                        List<S> pts=new ArrayList<>();
+                        for (int i = 0; i < idealPoints.length; i++) {
+                            Solution pt=new DoubleTaggedSolution((DoubleProblem) problem);
+                            for (int j = 0; j < idealPoints.length; j++) {
+                                pt.setObjective(i, idealPoints[i]);
+                            }
+                            pt.setObjective(i, nadirPoints[i]);
+                            pts.add((S) pt);
+                        }
+                        
+                        Front ft=new ArrayFront(pts);
+                        this.qualityIndicator.setParetoTrueFront(ft);
                         this.qualityIndicator.setMinMax(idealPoints, nadirPoints);
                         //System.out.println(this.getAgentName()+" gets population "+currentPopulation.size());
                         List<List<S>[]> allsharestype = this.separatePopulationByOp(currentPopulation);
@@ -183,8 +194,6 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
                     doAction(problemArtifactId, new Op("setAlreadyVoted", this.id));
                 }
             } catch (CartagoException ex) {
-                Logger.getLogger(IndicatorVoter.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException ex) {
                 Logger.getLogger(IndicatorVoter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
