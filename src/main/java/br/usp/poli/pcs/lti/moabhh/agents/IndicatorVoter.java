@@ -124,7 +124,7 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
             for (int i = 0; i < agids.size(); i++) {
                 this.arms[i] = agids.get(i).getAgentName();
             }
-            ReferencePointUtils.findReference(problem.getName(), problem.getNumberOfObjectives());
+            ReferencePointUtils.findReference(problem.getName(), problem.getNumberOfObjectives(), problem instanceof RealWorldProblem);
             nadirPoints=ReferencePointUtils.nadir;
             idealPoints=ReferencePointUtils.ideal;
         } catch (CartagoException | IOException ex) {

@@ -18,11 +18,10 @@ public class ReferencePointUtils {
     public static double[] nadir = null;
     public static double[] ideal = null;
 
-    public static void findReference(String problemName, int m) throws FileNotFoundException {
+    public static void findReference(String problemName, int m, boolean isReal) throws FileNotFoundException {
         if (nadir == null) {
             nadir = new double[m];
-            String pf = "pareto_fronts/" + problemName + "." + m + "D.pf";
-            ArrayFront pfFront = new ArrayFront(pf);
+            ideal= new double[m];
             if (problemName.contains("WFG")) {
                 double[] base = new double[]{3.0, 5.0, 7.0, 9.0, 11.0, 13.0, 15.0, 17.0, 19.0, 21.0, 23.0, 25.0, 27.0, 29.0, 31.0, 33.0, 35.0, 37.0, 39.0, 41.0, 43.0};
                 nadir = Arrays.copyOf(base, m);
@@ -30,10 +29,12 @@ public class ReferencePointUtils {
                 Arrays.fill(nadir, 0.5);
             } else if (problemName.contains("DTLZ")) {
                 Arrays.fill(nadir, 1.0);
-            } else {
+            } else if(!isReal){
+                String pf = "pareto_fronts/" + problemName + "." + m + "D.pf";
+                ArrayFront pfFront = new ArrayFront(pf);
+                ReferencePointUtils.ideal = FrontUtils.getMinimumValues(pfFront);
                 ReferencePointUtils.nadir = FrontUtils.getMaximumValues(pfFront);
             }
-            ReferencePointUtils.ideal = FrontUtils.getMinimumValues(pfFront);
         }
     }
 
@@ -55,14 +56,14 @@ public class ReferencePointUtils {
         return newpopulation;
     }
 
-    public static List removeWorseThanNadir(List population, String problem, int m) throws FileNotFoundException {
-        double[] nadir = getNadir(problem, m);
+    public static List removeWorseThanNadir(List population, String problem, int m, boolean isReal) throws FileNotFoundException {
+        double[] nadir = getNadir(problem, m, isReal);
         return removeWorseThanNadir(population, nadir, m);
     }
 
-    public static Front removeWorseThanNadir(Front front, String problem, int m) throws FileNotFoundException {
+    public static Front removeWorseThanNadir(Front front, String problem, int m, boolean isReal) throws FileNotFoundException {
         List population = FrontUtils.convertFrontToSolutionList(front);
-        double[] nadir = getNadir(problem, m);
+        double[] nadir = getNadir(problem, m, isReal);
         List newpopulation = ReferencePointUtils.removeWorseThanNadir(population, nadir, m);
         if (!newpopulation.isEmpty()) {
             return new ArrayFront(newpopulation);
@@ -70,13 +71,13 @@ public class ReferencePointUtils {
         return null;
     }
 
-    public static double[] getNadir(String problem, int m) throws FileNotFoundException {
-        findReference(problem, m);
+    public static double[] getNadir(String problem, int m, boolean isReal) throws FileNotFoundException {
+        findReference(problem, m, isReal);
         return nadir;
     }
 
-    public static double[] getIdeal(String problem, int m) throws FileNotFoundException {
-        findReference(problem, m);
+    public static double[] getIdeal(String problem, int m, boolean isReal) throws FileNotFoundException {
+        findReference(problem, m, isReal);
         return ideal;
     }
 }
