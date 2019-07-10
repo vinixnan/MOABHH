@@ -49,6 +49,9 @@ public class SystemVariablesArtifact extends Artifact {
     private int posOfExecutingAlg;
 
     protected int[] qtdToRun;
+    
+    protected int qtdVotersVoted;
+    protected int qtdVoters;
 
     /**
      * Instantiates a new System variables artifact.
@@ -69,6 +72,7 @@ public class SystemVariablesArtifact extends Artifact {
         this.endTimes = new HashMap<>();
         this.allvotes = new ArrayList<>();
         this.allowedToExecute = new HashMap<>();
+        qtdVotersVoted=0;
     }
 
     /**
@@ -364,6 +368,31 @@ public class SystemVariablesArtifact extends Artifact {
         } else {
             res.set(false);
         }
+    }
+    
+    /**
+     * Is votation finished.
+     *
+     * @param res the res
+     */
+    @OPERATION
+    public void isVotationEvaluated(OpFeedbackParam<Object> res) {
+        res.set(qtdVotersVoted>=qtdVoters);
+    }
+    
+    @OPERATION
+    public void setVotersQtd(int qtdVoters) {
+        this.qtdVoters=qtdVoters;
+    }
+    
+    @OPERATION
+    public void increaseVoted() {
+        qtdVotersVoted++;
+    }
+    
+    @OPERATION
+    public void resetVoted() {
+        qtdVotersVoted=0;
     }
 
     /**

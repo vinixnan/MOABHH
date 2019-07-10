@@ -22,24 +22,17 @@ public class ReferencePointUtils {
         if (nadir == null) {
             nadir = new double[m];
             String pf = "pareto_fronts/" + problemName + "." + m + "D.pf";
-            ArrayFront pfFront= new ArrayFront(pf);
+            ArrayFront pfFront = new ArrayFront(pf);
             if (problemName.contains("WFG")) {
                 double[] base = new double[]{3.0, 5.0, 7.0, 9.0, 11.0, 13.0, 15.0, 17.0, 19.0, 21.0, 23.0, 25.0, 27.0, 29.0, 31.0, 33.0, 35.0, 37.0, 39.0, 41.0, 43.0};
                 nadir = Arrays.copyOf(base, m);
-            } else if (problemName.contains("DTLZ1") && m == 3) {
-                Arrays.fill(nadir, 0.5);
             } else if (problemName.contains("DTLZ1")) {
-                Arrays.fill(nadir, 10.0);
-            } else if (problemName.contains("DTLZ") && m == 3) {
-                Arrays.fill(nadir, 2.0);
+                Arrays.fill(nadir, 0.5);
             } else if (problemName.contains("DTLZ")) {
-                Arrays.fill(nadir, 20.0);
+                Arrays.fill(nadir, 1.0);
             } else {
                 ReferencePointUtils.nadir = FrontUtils.getMaximumValues(pfFront);
             }
-            for (int i = 0; i < nadir.length; i++) {
-                    nadir[i] = nadir[i] * 2;
-                }
             ReferencePointUtils.ideal = FrontUtils.getMinimumValues(pfFront);
         }
     }
@@ -81,7 +74,7 @@ public class ReferencePointUtils {
         findReference(problem, m);
         return nadir;
     }
-    
+
     public static double[] getIdeal(String problem, int m) throws FileNotFoundException {
         findReference(problem, m);
         return ideal;

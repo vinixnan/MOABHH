@@ -188,15 +188,20 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
                         qualityValues = performEvaluation(problem, currentPopulation, shares, qtdSolutions, epsilon, popSize);
                     }
                     previousPopulation = currentPopulation;
-                    res = new OpFeedbackParam<>();
+                    vote(qualityValues, beta);
                     //System.out.println(this.getAgentName() + " votes " + Arrays.toString(qualityValues));
-                    doAction(votingArtifactId, new Op("vote", qualityValues, this.id, beta, res));
-                    doAction(problemArtifactId, new Op("setAlreadyVoted", this.id));
+                    
                 }
             } catch (CartagoException ex) {
                 Logger.getLogger(IndicatorVoter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    protected void vote(double[] qualityValues, double beta) throws CartagoException {
+        OpFeedbackParam res = new OpFeedbackParam<>();
+        doAction(votingArtifactId, new Op("vote", qualityValues, this.id, beta, res));
+        doAction(problemArtifactId, new Op("setAlreadyVoted", this.id));
     }
 
     protected double[] performEvaluation(Problem problem, List<S> currentPopulation, List<S>[] shares, double[] qtdSolutions, int epsilon, int popSize) throws CartagoException {
