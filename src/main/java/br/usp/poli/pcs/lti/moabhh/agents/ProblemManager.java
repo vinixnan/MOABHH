@@ -264,7 +264,8 @@ public class ProblemManager<S extends Solution<?>> extends SimplerAgent {
                 strToReturn = hypValue + ";" + igdValue + ";" + rniValue;
             }
         }
-        String dir = "result/MOABHH_"+beta+"_"+epsilon+"_"+delta+"_"+fileNameAppendix+"/" + problem.getName() + "_" + problem.getNumberOfObjectives();
+        String dir = "/home/vinicius/Projetos/MOABHH-dev/result/MOABHH_"+beta+"_"+epsilon+"_"+delta+"_"+fileNameAppendix+"/" + problem.getName() + "_" + problem.getNumberOfObjectives();
+        System.out.println(dir);
         new File(dir).mkdirs();
         String funFile = dir + "/FUN" + executionCounter + ".tsv";
         String varFile = dir + "/VAR" + executionCounter + ".tsv";
