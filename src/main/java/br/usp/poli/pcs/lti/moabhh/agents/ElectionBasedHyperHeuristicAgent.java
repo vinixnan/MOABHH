@@ -196,7 +196,7 @@ public class ElectionBasedHyperHeuristicAgent<S extends Solution<?>> extends Hyp
             for (Object id : listMhAgents) {
                 toprint += id.toString().split("_")[0] + " ";
             }
-            //System.out.println(toprint + "\n" + Arrays.toString(discretizedQtdSolutions) + " at " + gen + " beta=" + fn + "\n");
+            System.out.println(toprint + "\n" + Arrays.toString(discretizedQtdSolutions) + " at " + gen + " beta=" + fn + "\n");
             int sum = 0;
             for (int i = 0; i < discretizedQtdSolutions.length; i++) {
                 if (discretizedQtdSolutions[i] > 0) {

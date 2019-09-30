@@ -200,6 +200,7 @@ public class ProblemManager<S extends Solution<?>> extends SimplerAgent {
                     
                     try {
                         System.out.println("HH;" + this.printResults(currentPopulation, problem) + ";" + (end - begin));
+                        //System.out.println(((RealWorldProblem)problem).getQtdEvaluated()+" evals");
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(ProblemManager.class.getName()).log(Level.SEVERE, null, ex);
                     }
