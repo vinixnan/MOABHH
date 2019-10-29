@@ -163,7 +163,14 @@ public class ProblemManager<S extends Solution<?>> extends SimplerAgent {
                 int maxIterations = (int) this.getAttributeArtifact(problemArtifactId, "getMaxIterations");
                 int iterations = (int) this.getAttributeArtifact(problemArtifactId, "getIteration");
                 //System.out.println(this.getAgentName()+" "+iterations+" of "+maxIterations);
-
+                long current = System.currentTimeMillis();
+                long total=(current-begin);
+                if( total > 2700000){
+                    //2700000 45 min
+                    System.err.println("TIME TO KILL-------");
+                    System.exit(0);
+                }
+                
                 if (iterations >= maxIterations) {
                     //System.out.println("Saida");
                     List<S> currentPopulation = this.getResultingPopulation();
