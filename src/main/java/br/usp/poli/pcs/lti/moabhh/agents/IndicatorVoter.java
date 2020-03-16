@@ -1,6 +1,7 @@
 package br.usp.poli.pcs.lti.moabhh.agents;
 
 import br.usp.poli.pcs.lti.jmetalhhhelper.core.DoubleTaggedSolution;
+import br.usp.poli.pcs.lti.jmetalhhhelper.core.PermutationTaggedSolution;
 import br.usp.poli.pcs.lti.jmetalhhhelper.core.TaggedSolution;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.IndicatorFactory;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.*;
@@ -23,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.math3.stat.StatUtils;
 import org.uma.jmetal.problem.DoubleProblem;
+import org.uma.jmetal.problem.PermutationProblem;
 
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
@@ -166,7 +168,13 @@ public class IndicatorVoter<S extends Solution<?>> extends SimplerAgent {
                         }
                         List<S> pts=new ArrayList<>();
                         for (int i = 0; i < idealPoints.length; i++) {
-                            Solution pt=new DoubleTaggedSolution((DoubleProblem) problem);
+                            Solution pt;
+                            if(problem instanceof DoubleProblem){
+                                pt=new DoubleTaggedSolution((DoubleProblem) problem);
+                            }
+                            else{
+                                pt=new PermutationTaggedSolution((PermutationProblem) problem);
+                            }
                             for (int j = 0; j < idealPoints.length; j++) {
                                 pt.setObjective(i, idealPoints[i]);
                             }
