@@ -5,12 +5,14 @@ import br.usp.poli.pcs.lti.moabhh.agents.HyperHeuristicAgent;
 import br.usp.poli.pcs.lti.moabhh.agents.IndicatorVoter;
 import br.usp.poli.pcs.lti.moabhh.agents.ProblemManager;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.IndicatorFactory;
-import br.usp.poli.pcs.lti.jmetalproblems.util.ProblemFactory;
+
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.HypervolumeCalculator;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.IgdCalculator;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.metrics.RniCalculator;
 import br.usp.poli.pcs.lti.moabhh.agents.AlgorithmAgentv2;
+import br.usp.poli.pcs.lti.moabhh.core.votingmethods.Borda;
 import br.usp.poli.pcs.lti.moabhh.core.votingmethods.Copeland;
+import br.usp.poli.pcs.lti.moabhh.core.votingmethods.Kemeny;
 import br.usp.poli.pcs.lti.moabhh.core.votingmethods.VotingMethod;
 
 import cartago.CartagoService;
@@ -23,6 +25,7 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.SolutionListUtils;
 import br.usp.poli.pcs.lti.jmetalhhhelper.util.ExtraPseudoRandom;
+import br.usp.poli.pcs.lti.jmetalhhhelper.util.ProblemFactoryExtra;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 /**
@@ -58,6 +61,9 @@ public class CartagoJMetalNottingham<S extends Solution<?>> {
         } else {
             problemName = "DiskBrakeDesign";
             problemName = "NeuralNetDoublePoleBalancing";
+            problemName="FacilityPlacement";
+            problemName="KernelRidgeRegressionParameterTuning";
+            problemName="DiskBrakeDesign";
             //problemName = "WFG1";
             m = 3; //M Number of objective functions
             beta = 100;//25
@@ -66,6 +72,7 @@ public class CartagoJMetalNottingham<S extends Solution<?>> {
             k = 4; //Number of position parameters
             l = 20; //Number of distance parameters
             votingMethodName = "Copeland";
+            votingMethodName = "Kemeny";
             //problemName = "WFG1";
             //delta=10;
             //epsilon=1000;
@@ -78,34 +85,45 @@ public class CartagoJMetalNottingham<S extends Solution<?>> {
             JMetalRandom.getInstance().setSeed(seed);
         }
         VotingMethod votingmethod;
-        votingmethod = new Copeland();
-        /*
         switch (votingMethodName) {
             case "Copeland":
                 votingmethod = new Copeland();
                 break;
             case "Kemeny":
-                //votingmethod = new Kemeny();
+                votingmethod = new Kemeny();
                 break;
             case "Borda":
-                //votingmethod = new Borda();
+                votingmethod = new Borda();
                 break;
             default:
                 votingmethod = new Copeland();
         }
-        */
         populationSize = 100;
         numGenerations = 1000;//HARDCODED, in future change to 6250 750
         path = "result/";
         long uId = ExtraPseudoRandom.getInstance().nextInt(0, 1000000000);
-        Problem[] problems = ProblemFactory.getProblems(problemName, k, l, m);
+        Problem[] problems = ProblemFactoryExtra.getProblems(problemName, k, l, m);
         CartagoService.startNode();
+        /*
+        if(problemName.equals("AucMaximization") || problemName.equals("NeuralNetDoublePoleBalancing")) {
+            numGenerations=250;
+            epsilon=epsilon/4;
+            delta=epsilon;
+        }
+        */
+        if(problemName.equals("KernelRidgeRegressionParameterTuning") || problemName.equals("FacilityPlacement")){
+            numGenerations=50;
+            epsilon=1;
+            delta=2;
+            beta=50;
+            populationSize=30;
+        }
         //CartagoService.registerLogger("default", new BasicLoggerOnFile("log.txt"));
         //CartagoService.addArtifactFactory("", new DefaultArtifactFactory());
         //System.out.println(problems[0].getName() + "." + problems[0].getNumberOfObjectives() + "D.pf");
         /*create manager and artifacts with no agent reference*/
         ProblemManager manager = new ProblemManager(problems[0], uId, populationSize, numGenerations, beta, delta, epsilon, votingmethod, executionCounter, seed);
-        manager.setFileNameAppendix("Standard_"+votingMethodName);
+        manager.setFileNameAppendix("ExtraStandard_"+votingMethodName);
         manager.initArtifacts();
         //System.out.println(votingmethod.getClass().getCanonicalName());
         //System.out.println(problems[0].getName());

@@ -25,6 +25,7 @@ import org.uma.jmetal.util.SolutionListUtils;
 import org.uma.jmetal.util.fileoutput.SolutionListOutput;
 import org.uma.jmetal.util.fileoutput.impl.DefaultFileOutputContext;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
+import uk.ac.nottingham.asap.realproblems.ExternalProblem;
 
 /**
  * The type Problem manager.
@@ -163,14 +164,7 @@ public class ProblemManager<S extends Solution<?>> extends SimplerAgent {
                 int maxIterations = (int) this.getAttributeArtifact(problemArtifactId, "getMaxIterations");
                 int iterations = (int) this.getAttributeArtifact(problemArtifactId, "getIteration");
                 //System.out.println(this.getAgentName()+" "+iterations+" of "+maxIterations);
-                long current = System.currentTimeMillis();
-                long total=(current-begin);
-                if( total > 2700000){
-                    //2700000 45 min
-                    System.err.println("TIME TO KILL-------");
-                    System.exit(0);
-                }
-                
+
                 if (iterations >= maxIterations) {
                     //System.out.println("Saida");
                     List<S> currentPopulation = this.getResultingPopulation();
@@ -207,9 +201,12 @@ public class ProblemManager<S extends Solution<?>> extends SimplerAgent {
                     
                     try {
                         System.out.println("HH;" + this.printResults(currentPopulation, problem) + ";" + (end - begin));
-                        //System.out.println(((RealWorldProblem)problem).getQtdEvaluated()+" evals");
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(ProblemManager.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    if(problem instanceof ExternalProblem){
+                        System.out.println("Evaluated: "+((ExternalProblem)problem).getQtdEvaluated());
+                        System.out.println("Iterations: "+iterations);
                     }
                     System.err.println(Arrays.toString(firstPlace).replace(", ", ";").replace("[", "").replace("]", ""));
                     System.err.println(Arrays.toString(secondPlace).replace(", ", ";").replace("[", "").replace("]", ""));
@@ -272,8 +269,7 @@ public class ProblemManager<S extends Solution<?>> extends SimplerAgent {
                 strToReturn = hypValue + ";" + igdValue + ";" + rniValue;
             }
         }
-        String dir = "/home/vinicius/Projetos/MOABHH-dev/result/MOABHH_"+beta+"_"+epsilon+"_"+delta+"_"+fileNameAppendix+"/" + problem.getName() + "_" + problem.getNumberOfObjectives();
-        System.out.println(dir);
+        String dir = "result/MOABHH_"+beta+"_"+epsilon+"_"+delta+"_"+fileNameAppendix+"/" + problem.getName() + "_" + problem.getNumberOfObjectives();
         new File(dir).mkdirs();
         String funFile = dir + "/FUN" + executionCounter + ".tsv";
         String varFile = dir + "/VAR" + executionCounter + ".tsv";
