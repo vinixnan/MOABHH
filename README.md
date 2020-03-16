@@ -1,5 +1,5 @@
 # MOABHH
-
+[![CircleCI](https://circleci.com/gh/vinixnan/MOABHH.svg?style=svg)](https://circleci.com/gh/vinixnan/MOABHH)
 [![Build Status](https://travis-ci.org/vinixnan/MOABHH.svg?branch=master)](https://travis-ci.org/vinixnan/MOABHH)
 
 Multi-Objective Agent-Based Hyper-Heuristic
