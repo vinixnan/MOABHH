@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/vinixnan/MOABHH.svg?branch=master)](https://travis-ci.org/vinixnan/MOABHH)
 
-MOABHH
+Multi-Objective Agent-Based Hyper-Heuristic
 
 Applying Copeland Voting to Design an Agent-Based Hyper-Heuristic (AAMAS'17)
 http://dl.acm.org/citation.cfm?id=3091263
