@@ -10,7 +10,7 @@
         <server>
             <id>github</id>
             <username>Owner</username>
-            <password>${server.password}</password>
+            <password>${GIT_HUB_KEY}</password>
         </server>
     </servers>
 
