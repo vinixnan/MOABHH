@@ -1,6 +1,6 @@
 FROM maven:3.6.3-jdk-11-openj9 AS build
 
-ENV GIT_HUB_KEY=${GIT_HUB_KEY}
+ARG GIT_HUB_KEY
 
 RUN mkdir -p /workspace
 WORKDIR /workspace
