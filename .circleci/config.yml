@@ -7,4 +7,4 @@ workflows:
   maven_test:
     jobs:
       - maven/test:
-          command: '--file pom.xml -s settings.xml'
+          settings_file: 'settings.xml'

@@ -10,8 +10,7 @@
         <server>
             <id>github</id>
             <username>Owner</username>
-            <!-- really read-only key for a public repo-->
-            <password>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</password>
+            <password>${server.password}</password>
         </server>
     </servers>
 
